@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APISenac", "APISenac\APISenac.csproj", "{6FB2B53E-E037-47A1-A77C-024F411B670C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6FB2B53E-E037-47A1-A77C-024F411B670C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FB2B53E-E037-47A1-A77C-024F411B670C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FB2B53E-E037-47A1-A77C-024F411B670C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FB2B53E-E037-47A1-A77C-024F411B670C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
