@@ -1,17 +1,24 @@
-using WebApplication1.data;
-using WebApplication1.sistemas;
+using WebApplication1.Data;
+using WebApplication1.Models;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Models.sistemas;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Adicionar serviços ao contêiner
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<AppDbContex>();
+
+// Obter a Connection String do appsettings.json
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+// Configurar o DbContext com a Connection String
+builder.Services.AddDbContext<AppDbContex>(options =>
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configurar o pipeline de requisição HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -20,9 +27,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-//Configurando as rotas
-app.AddRotasSistemas();
+// Configurando as rotas
 
 app.Run();
-

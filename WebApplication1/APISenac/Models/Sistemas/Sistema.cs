@@ -1,9 +1,9 @@
-namespace WebApplication1.Entities.sistemas;
+namespace WebApplication1.Models.sistemas;
 
 public class Sistema
 {
     public Guid Id { get; init; }
-    public string Nome { get; private set; }
+    public string Nome { get; private set; } = string.Empty;
     public DateTime DataHora { get; private set; } = DateTime.Now;
     public DateTime LastUpdate { get; private set; }  
     public bool Active { get; private set; }
