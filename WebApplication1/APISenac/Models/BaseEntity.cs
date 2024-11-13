@@ -1,4 +1,4 @@
-namespace APISenac.Models.Base
+namespace APISenac.Models
 {
     public class BaseEntity
     {

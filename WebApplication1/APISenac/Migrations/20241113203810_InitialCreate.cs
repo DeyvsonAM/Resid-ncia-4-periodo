@@ -15,11 +15,11 @@ namespace WebApplication1.Migrations
                 name: "Sistemas",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    DataHora = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LastUpdate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataHora = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,13 +30,13 @@ namespace WebApplication1.Migrations
                 name: "Profiles",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: false),
-                    SistemaId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    UsuarioInserido = table.Column<string>(type: "TEXT", nullable: false),
-                    DataDeCriacao = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    LastUpdate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Active = table.Column<bool>(type: "INTEGER", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    SistemaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioInserido = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DataDeCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

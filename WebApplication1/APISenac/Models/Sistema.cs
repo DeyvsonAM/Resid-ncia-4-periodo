@@ -1,4 +1,4 @@
-namespace WebApplication1.Models.sistemas;
+namespace APISenac.Models;
 
 public class Sistema
 {

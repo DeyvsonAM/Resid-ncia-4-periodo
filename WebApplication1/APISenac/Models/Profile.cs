@@ -1,8 +1,9 @@
-using APISenac.Models.Base;
-using WebApplication1.Models.sistemas;
+using APISenac.Models;
 
-namespace APISenac.Models.Profile
+
+namespace APISenac.Models
 {
+
     public class Profile : BaseEntity
     {
          public string Nome { get; set; } = string.Empty;
