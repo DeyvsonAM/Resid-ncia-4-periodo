@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APISenac")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0181ecda0d69e718108c9a5c2ee3c3202ce31ffd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39a23f8010d3e060a7260153ee637c87e7470ee6")]
 [assembly: System.Reflection.AssemblyProductAttribute("APISenac")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APISenac")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

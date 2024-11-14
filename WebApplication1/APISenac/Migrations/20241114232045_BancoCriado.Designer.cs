@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241113211828_TodasAsModels")]
-    partial class TodasAsModels
+    [Migration("20241114232045_BancoCriado")]
+    partial class BancoCriado
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,7 +64,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("Custom_Atributes");
                 });
 
-            modelBuilder.Entity("APISenac.Models.Permitions", b =>
+            modelBuilder.Entity("APISenac.Models.Permition", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -94,7 +94,7 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("SistemaId");
 
-                    b.ToTable("Permitionss");
+                    b.ToTable("Permitions");
                 });
 
             modelBuilder.Entity("APISenac.Models.Profile", b =>
@@ -132,68 +132,33 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("APISenac.Models.Profile_CustomAtribute", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("Custom_AtributeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataDeCriacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime2");
-
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsuarioInserido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("CustomAtributeId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProfileId", "CustomAtributeId");
 
-                    b.HasIndex("Custom_AtributeId");
-
-                    b.HasIndex("ProfileId");
+                    b.HasIndex("CustomAtributeId");
 
                     b.ToTable("Profile_CustomAtributes");
                 });
 
             modelBuilder.Entity("APISenac.Models.Profile_Permition", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DataDeCriacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PermitionsId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsuarioInserido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("PermitionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("ProfilePermitionId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("PermitionsId");
+                    b.HasKey("ProfileId", "PermitionId");
 
-                    b.HasIndex("ProfileId");
+                    b.HasIndex("PermitionId");
 
                     b.ToTable("Profile_Permitions");
                 });
@@ -207,7 +172,7 @@ namespace WebApplication1.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("DataHora")
+                    b.Property<DateTime>("DataDeCriacao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LastUpdate")
@@ -217,9 +182,13 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UsuarioInserido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Sistemas");
+                    b.ToTable("Sistema");
                 });
 
             modelBuilder.Entity("APISenac.Models.User", b =>
@@ -236,14 +205,16 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("LastUpdate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("UsuarioInserido")
                         .IsRequired()
@@ -256,52 +227,34 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("APISenac.Models.UserProfile_CustomAtribute", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("UserProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("Custom_AtributeId")
+                    b.Property<Guid>("CustomAtributeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DataDeCriacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("User_ProfileId")
+                    b.Property<Guid?>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsuarioInserido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserProfileId", "CustomAtributeId");
 
-                    b.HasIndex("Custom_AtributeId");
+                    b.HasIndex("CustomAtributeId");
 
-                    b.HasIndex("User_ProfileId");
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserProfile_CustomAtributes");
                 });
 
             modelBuilder.Entity("APISenac.Models.User_Profile", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UserProfileId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DataDeCriacao")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastUpdate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
@@ -309,11 +262,7 @@ namespace WebApplication1.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("UsuarioInserido")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserProfileId");
 
                     b.HasIndex("ProfileId");
 
@@ -322,7 +271,7 @@ namespace WebApplication1.Migrations
                     b.ToTable("User_Profiles");
                 });
 
-            modelBuilder.Entity("APISenac.Models.Permitions", b =>
+            modelBuilder.Entity("APISenac.Models.Permition", b =>
                 {
                     b.HasOne("APISenac.Models.Sistema", "Sistema")
                         .WithMany()
@@ -346,57 +295,65 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("APISenac.Models.Profile_CustomAtribute", b =>
                 {
-                    b.HasOne("APISenac.Models.Custom_Atribute", "Custom_Atribute")
-                        .WithMany()
-                        .HasForeignKey("Custom_AtributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("APISenac.Models.Custom_Atribute", "CustomAtribute")
+                        .WithMany("Profile_CustomAtributes")
+                        .HasForeignKey("CustomAtributeId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("APISenac.Models.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("Profile_CustomAtributes")
                         .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Custom_Atribute");
+                    b.Navigation("CustomAtribute");
 
                     b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("APISenac.Models.Profile_Permition", b =>
                 {
-                    b.HasOne("APISenac.Models.Permitions", "Permitions")
-                        .WithMany()
-                        .HasForeignKey("PermitionsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("APISenac.Models.Permition", "Permition")
+                        .WithMany("Profile_Permitions")
+                        .HasForeignKey("PermitionId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("APISenac.Models.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("Profile_Permitions")
                         .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Permitions");
+                    b.Navigation("Permition");
 
                     b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("APISenac.Models.UserProfile_CustomAtribute", b =>
                 {
-                    b.HasOne("APISenac.Models.Custom_Atribute", "Custom_Atribute")
-                        .WithMany()
-                        .HasForeignKey("Custom_AtributeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                    b.HasOne("APISenac.Models.Custom_Atribute", "CustomAtribute")
+                        .WithMany("UserProfile_CustomAtributes")
+                        .HasForeignKey("CustomAtributeId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("APISenac.Models.Profile", null)
+                        .WithMany("UserProfile_CustomAtributes")
+                        .HasForeignKey("ProfileId");
+
+                    b.HasOne("APISenac.Models.User", null)
+                        .WithMany("UserProfile_CustomAtributes")
+                        .HasForeignKey("UserId");
 
                     b.HasOne("APISenac.Models.User_Profile", "User_Profile")
-                        .WithMany()
-                        .HasForeignKey("User_ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("UserProfile_CustomAtributes")
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Custom_Atribute");
+                    b.Navigation("CustomAtribute");
 
                     b.Navigation("User_Profile");
                 });
@@ -404,20 +361,55 @@ namespace WebApplication1.Migrations
             modelBuilder.Entity("APISenac.Models.User_Profile", b =>
                 {
                     b.HasOne("APISenac.Models.Profile", "Profile")
-                        .WithMany()
+                        .WithMany("User_Profiles")
                         .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("APISenac.Models.User", "User")
-                        .WithMany()
+                        .WithMany("User_Profiles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Profile");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("APISenac.Models.Custom_Atribute", b =>
+                {
+                    b.Navigation("Profile_CustomAtributes");
+
+                    b.Navigation("UserProfile_CustomAtributes");
+                });
+
+            modelBuilder.Entity("APISenac.Models.Permition", b =>
+                {
+                    b.Navigation("Profile_Permitions");
+                });
+
+            modelBuilder.Entity("APISenac.Models.Profile", b =>
+                {
+                    b.Navigation("Profile_CustomAtributes");
+
+                    b.Navigation("Profile_Permitions");
+
+                    b.Navigation("UserProfile_CustomAtributes");
+
+                    b.Navigation("User_Profiles");
+                });
+
+            modelBuilder.Entity("APISenac.Models.User", b =>
+                {
+                    b.Navigation("UserProfile_CustomAtributes");
+
+                    b.Navigation("User_Profiles");
+                });
+
+            modelBuilder.Entity("APISenac.Models.User_Profile", b =>
+                {
+                    b.Navigation("UserProfile_CustomAtributes");
                 });
 #pragma warning restore 612, 618
         }
