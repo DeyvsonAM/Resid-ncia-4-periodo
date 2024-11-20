@@ -6,7 +6,7 @@ namespace APISenac.Models
 
         public virtual Sistema Sistema {get; set;} 
 
-        public ICollection<Profile_Permition> Profile_Permitions { get; set; }
+        public ICollection<ProfilePermition> ProfilePermitions { get; set; }
 
     }
 }

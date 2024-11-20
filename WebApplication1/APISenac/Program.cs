@@ -18,8 +18,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+//Fazer função que usa Reflection para injetar todos os serviços (OBRIGATÔRIO)
 // Registra os serviços de injeção de dependência
 builder.Services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
 builder.Services.AddScoped<ISistemaService, SistemaService>();

@@ -8,7 +8,7 @@ namespace APISenac.Services
 
     public class BaseService<T> : IBaseService<T> where T : class
     {
-        protected readonly DbContext _context;
+        protected readonly DbContext _context;  //Precisa puxa do data Unityofwork , gerenciamenro de trasação
         private readonly DbSet<T> _dbSet;
 
         public BaseService(DbContext context)

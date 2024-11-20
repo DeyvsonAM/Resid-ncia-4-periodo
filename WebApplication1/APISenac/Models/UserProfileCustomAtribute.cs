@@ -1,13 +1,13 @@
 namespace APISenac.Models
 {
-    public class UserProfile_CustomAtribute 
+    public class UserProfileCustomAtribute 
     {
         
         //Chave estrangeira
         public Guid UserProfileId {get; set;}
         public Guid CustomAtributeId { get; set; }
 
-        public User_Profile User_Profile { get; set; }
-        public Custom_Atribute CustomAtribute { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public CustomAtribute CustomAtribute { get; set; }
     }
 }

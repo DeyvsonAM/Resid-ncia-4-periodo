@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace APISenac.Models
 {
-    public class Custom_Atribute : BaseEntity
+    public class CustomAtribute : BaseEntity
     {
         public string Valor { get; set; }
         public string TipoAtributo { get; set; }
@@ -10,8 +10,8 @@ namespace APISenac.Models
         public char Delimitador { get; set; }
 
        
-        public ICollection<Profile_CustomAtribute> Profile_CustomAtributes { get; set; }
-        public ICollection<UserProfile_CustomAtribute> UserProfile_CustomAtributes { get; set; }
+        public ICollection<Profile_CustomAtribute> ProfileCustomAtributes { get; set; }
+        public ICollection<UserProfileCustomAtribute> UserProfileCustomAtributes { get; set; }
 
     }
 }

@@ -9,6 +9,6 @@ namespace APISenac.Models
         
         
         public Profile Profile { get; set; }
-        public Custom_Atribute CustomAtribute { get; set; }
+        public CustomAtribute CustomAtribute { get; set; }
     }
 }

@@ -1,9 +1,9 @@
-using WebApplication1.Data;
+using APISenac.Data;
 using APISenac.Models;
 
 namespace APISenac.Services
 {
-    public class Custom_AtributeService : BaseService<Custom_Atribute>
+    public class Custom_AtributeService : BaseService<CustomAtribute>
     {
         public Custom_AtributeService(AppDbContext context) : base(context) { }
     }

@@ -3,6 +3,7 @@ using System;
 using System.Threading.Tasks;
 using APISenac.Services;
 using APISenac.Services.Interfaces;
+//Gerenciamento de exeção global - Middleware
 
 namespace APISenac.Controllers
 {

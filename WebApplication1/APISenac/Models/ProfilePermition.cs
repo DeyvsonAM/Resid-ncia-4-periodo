@@ -1,6 +1,6 @@
 namespace APISenac.Models
 {
-    public class Profile_Permition
+    public class ProfilePermition
 
     { 
         public Guid ProfilePermitionId { get; set; }

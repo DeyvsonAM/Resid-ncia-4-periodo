@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using APISenac.Models;
 
-namespace WebApplication1.Data
+namespace APISenac.Data
 {
     public class AppDbContext : DbContext
     {
@@ -12,13 +12,13 @@ namespace WebApplication1.Data
         // Definindo os DbSets para suas entidades
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<User_Profile> User_Profiles { get; set; }
+        public DbSet<UserProfile> User_Profiles { get; set; }
         
         public DbSet<Permition> Permitions { get; set; }
-        public DbSet<Profile_Permition> Profile_Permitions { get; set; }
-        public DbSet<Custom_Atribute> Custom_Atributes { get; set; }
+        public DbSet<ProfilePermition> ProfilePermitions { get; set; }
+        public DbSet<CustomAtribute> Custom_Atributes { get; set; }
         public DbSet<Profile_CustomAtribute> Profile_CustomAtributes { get; set; }
-        public DbSet<UserProfile_CustomAtribute> UserProfile_CustomAtributes { get; set; }
+        public DbSet<UserProfileCustomAtribute> UserProfile_CustomAtributes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
@@ -36,34 +36,34 @@ namespace WebApplication1.Data
         .HasMaxLength(100);
 
     // Configuração de User_Profile
-    modelBuilder.Entity<User_Profile>()
+    modelBuilder.Entity<UserProfile>()
         .HasKey(up => new { up.UserProfileId });
 
-    modelBuilder.Entity<User_Profile>()
+    modelBuilder.Entity<UserProfile>()
         .HasOne(up => up.User)
-        .WithMany(u => u.User_Profiles)
+        .WithMany(u => u.UserProfiles)
         .HasForeignKey(up => up.UserId)
         .OnDelete(DeleteBehavior.NoAction);
 
-    modelBuilder.Entity<User_Profile>()
+    modelBuilder.Entity<UserProfile>()
         .HasOne(up => up.Profile)
-        .WithMany(p => p.User_Profiles)
+        .WithMany(p => p.UserProfiles)
         .HasForeignKey(up => up.ProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
     // Configuração de Profile_Permition (muitas para muitas entre Profile e Permition)
-    modelBuilder.Entity<Profile_Permition>()
+    modelBuilder.Entity<ProfilePermition>()
         .HasKey(pp => new { pp.ProfileId, pp.PermitionId });
 
-    modelBuilder.Entity<Profile_Permition>()
+    modelBuilder.Entity<ProfilePermition>()
         .HasOne(pp => pp.Profile)
-        .WithMany(p => p.Profile_Permitions)
+        .WithMany(p => p.ProfilePermitions)
         .HasForeignKey(pp => pp.ProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
-    modelBuilder.Entity<Profile_Permition>()
+    modelBuilder.Entity<ProfilePermition>()
         .HasOne(pp => pp.Permition)
-        .WithMany(p => p.Profile_Permitions)
+        .WithMany(p => p.ProfilePermitions)
         .HasForeignKey(pp => pp.PermitionId)
         .OnDelete(DeleteBehavior.NoAction);
 
@@ -73,30 +73,30 @@ namespace WebApplication1.Data
 
     modelBuilder.Entity<Profile_CustomAtribute>()
         .HasOne(pc => pc.Profile)
-        .WithMany(p => p.Profile_CustomAtributes)
+        .WithMany(p => p.ProfileCustomAtributes)
         .HasForeignKey(pc => pc.ProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
     modelBuilder.Entity<Profile_CustomAtribute>()
         .HasOne(pc => pc.CustomAtribute)
-        .WithMany(ca => ca.Profile_CustomAtributes)
+        .WithMany(ca => ca.ProfileCustomAtributes)
         .HasForeignKey(pc => pc.CustomAtributeId)
         .OnDelete(DeleteBehavior.NoAction);
 
     // Configuração de UserProfile_CustomAtribute (chave composta entre UserProfile e CustomAtribute)
-    modelBuilder.Entity<UserProfile_CustomAtribute>()
+    modelBuilder.Entity<UserProfileCustomAtribute>()
         .HasKey(uca => new { uca.UserProfileId, uca.CustomAtributeId });
 
     // Relacionamento com User_Profile
-    modelBuilder.Entity<UserProfile_CustomAtribute>()
-        .HasOne(uca => uca.User_Profile)
-        .WithMany(up => up.UserProfile_CustomAtributes)
+    modelBuilder.Entity<UserProfileCustomAtribute>()
+        .HasOne(uca => uca.UserProfile)
+        .WithMany(up => up.UserProfileCustomAtributes)
         .HasForeignKey(uca => uca.UserProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
     // Relacionamento com Custom_Atribute
-    modelBuilder.Entity<UserProfile_CustomAtribute>()
+    modelBuilder.Entity<UserProfileCustomAtribute>()
         .HasOne(uca => uca.CustomAtribute)
-        .WithMany(ca => ca.UserProfile_CustomAtributes)
+        .WithMany(ca => ca.UserProfileCustomAtributes)
         .HasForeignKey(uca => uca.CustomAtributeId)
         .OnDelete(DeleteBehavior.NoAction);}}}
