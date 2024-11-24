@@ -3,7 +3,7 @@ using APISenac.Models;
 
 namespace APISenac.Data.DataContracts;
 
-public interface ISistemapository : IRepository<Sistema>
+public interface ISistemaRepository : IRepository<Sistema>
 {
     
 }

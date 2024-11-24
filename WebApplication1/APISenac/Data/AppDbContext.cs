@@ -14,8 +14,8 @@ namespace APISenac.Data
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<UserProfile> User_Profiles { get; set; }
         
-        public DbSet<Permition> Permitions { get; set; }
-        public DbSet<ProfilePermition> ProfilePermitions { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<ProfilePermission> ProfilePermissions { get; set; }
         public DbSet<CustomAtribute> Custom_Atributes { get; set; }
         public DbSet<Profile_CustomAtribute> Profile_CustomAtributes { get; set; }
         public DbSet<UserProfileCustomAtribute> UserProfile_CustomAtributes { get; set; }
@@ -51,20 +51,20 @@ namespace APISenac.Data
         .HasForeignKey(up => up.ProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
-    // Configuração de Profile_Permition (muitas para muitas entre Profile e Permition)
-    modelBuilder.Entity<ProfilePermition>()
-        .HasKey(pp => new { pp.ProfileId, pp.PermitionId });
+    // Configuração de Profile_Permission (muitas para muitas entre Profile e Permission)
+    modelBuilder.Entity<ProfilePermission>()
+        .HasKey(pp => new { pp.ProfileId, pp.PermissionId });
 
-    modelBuilder.Entity<ProfilePermition>()
+    modelBuilder.Entity<ProfilePermission>()
         .HasOne(pp => pp.Profile)
-        .WithMany(p => p.ProfilePermitions)
+        .WithMany(p => p.ProfilePermissions)
         .HasForeignKey(pp => pp.ProfileId)
         .OnDelete(DeleteBehavior.NoAction);
 
-    modelBuilder.Entity<ProfilePermition>()
-        .HasOne(pp => pp.Permition)
-        .WithMany(p => p.ProfilePermitions)
-        .HasForeignKey(pp => pp.PermitionId)
+    modelBuilder.Entity<ProfilePermission>()
+        .HasOne(pp => pp.Permission)
+        .WithMany(p => p.ProfilePermissions)
+        .HasForeignKey(pp => pp.PermissionId)
         .OnDelete(DeleteBehavior.NoAction);
 
     // Configuração de Profile_CustomAtribute (muitas para muitas entre Profile e Custom_Atribute)

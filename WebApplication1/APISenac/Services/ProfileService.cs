@@ -1,10 +1,14 @@
-using APISenac.Data;
 using APISenac.Models;
+using APISenac.Data.DataContracts;
 
 namespace APISenac.Services
 {
     public class ProfileService : BaseService<Profile>
     {
-        public ProfileService(AppDbContext context) : base(context) { }
+        public ProfileService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        // Métodos adicionais específicos para Profile, se necessário
     }
 }

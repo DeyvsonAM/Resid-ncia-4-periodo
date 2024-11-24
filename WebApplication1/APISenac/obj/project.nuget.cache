@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "OpEy4JWdQ28baxbKM4HC2dpa3TPo7cahULD0MjXaMT3Js0Zzjg8lunWjFWgsQkaaunpXAr6fjpODQGhN1A8SiQ==",
+  "dgSpecHash": "vdTXtvED7gRK5jcU5fQq0nKQRe5PlHmGK/+/LVKUd6+yJrxE5iwc6x6kZYAvkyNf9pSBhPN/9Ax3rYzWohizDw==",
   "success": true,
   "projectFilePath": "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\APISenac.csproj",
   "expectedPackageFiles": [
@@ -125,6 +125,7 @@
     "C:\\Users\\deyvs\\.nuget\\packages\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\deyvs\\.nuget\\packages\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\deyvs\\.nuget\\packages\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
+    "C:\\Users\\deyvs\\.nuget\\packages\\scrutor\\5.0.2\\scrutor.5.0.2.nupkg.sha512",
     "C:\\Users\\deyvs\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
     "C:\\Users\\deyvs\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
     "C:\\Users\\deyvs\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",

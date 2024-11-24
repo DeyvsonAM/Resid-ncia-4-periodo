@@ -1,10 +1,14 @@
-using APISenac.Data;
 using APISenac.Models;
+using APISenac.Data.DataContracts;
 
 namespace APISenac.Services
 {
-    public class Custom_AtributeService : BaseService<CustomAtribute>
+    public class CustomAtributeService : BaseService<CustomAtribute>
     {
-        public Custom_AtributeService(AppDbContext context) : base(context) { }
+        public CustomAtributeService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        // Métodos adicionais específicos para Custom_Atribute, se necessário
     }
 }

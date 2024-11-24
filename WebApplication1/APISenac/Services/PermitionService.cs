@@ -1,10 +1,14 @@
-using APISenac.Data;
 using APISenac.Models;
+using APISenac.Data.DataContracts;
 
 namespace APISenac.Services
 {
-    public class PermitionService : BaseService<Permition>
+    public class PermitionService : BaseService<Permission>
     {
-        public PermitionService(AppDbContext context) : base(context) { }
+        public PermitionService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        // Métodos adicionais específicos para Permition, se necessário
     }
 }

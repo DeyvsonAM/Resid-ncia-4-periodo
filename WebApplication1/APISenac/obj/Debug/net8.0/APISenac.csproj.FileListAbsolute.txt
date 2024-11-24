@@ -303,3 +303,4 @@ C:\Users\deyvs\OneDrive\Área de Trabalho\Faculdade\WebApplication1\WebApplicati
 C:\Users\deyvs\OneDrive\Área de Trabalho\Faculdade\WebApplication1\WebApplication1\APISenac\obj\Debug\net8.0\APISenac.RazorAssemblyInfo.cs
 C:\Users\deyvs\OneDrive\Área de Trabalho\Faculdade\WebApplication1\WebApplication1\APISenac\bin\Debug\net8.0\AutoMapper.dll
 C:\Users\deyvs\OneDrive\Área de Trabalho\Faculdade\WebApplication1\WebApplication1\APISenac\bin\Debug\net8.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\deyvs\OneDrive\Área de Trabalho\Faculdade\WebApplication1\WebApplication1\APISenac\bin\Debug\net8.0\Scrutor.dll

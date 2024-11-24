@@ -1,14 +1,21 @@
+using APISenac.Models;
+using System.Data;
+
+
+
+
 namespace APISenac.Data.DataContracts
+
+
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Permition> PermitionRepository { get; }
+        IRepository<Permission> PermitionRepository { get; }
         IRepository<Sistema> SistemaRepository { get; }
         IRepository<Profile> ProfileRepository {get ;}
-        IRepository<User> UsereRepository {get ;}
+        IRepository<User> UserRepository {get ;}
         IRepository<CustomAtribute> CustomAtributeRepository {get ;}
-        
-        
+        IRepository<T> GetRepository<T>() where T : class;
         
     void ForceBeginTransaction();
 

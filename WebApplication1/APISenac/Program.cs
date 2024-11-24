@@ -1,9 +1,14 @@
-using WebApplication1.Data;
+using APISenac.Data;
 using Microsoft.EntityFrameworkCore;
 using APISenac.Models;
 using Microsoft.AspNetCore.Mvc;
+
 using APISenac.Services;
 using APISenac.Services.Interfaces;
+using APISenac.Data.DataContracts;
+using System.Reflection;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,12 +23,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+builder.Services.AddScoped<APISenac.Data.DataContracts.IUnitOfWork, APISenac.Data.UnitOfWork>();
 //Fazer função que usa Reflection para injetar todos os serviços (OBRIGATÔRIO)
 // Registra os serviços de injeção de dependência
-builder.Services.AddScoped(typeof(IBaseService<>), typeof(BaseService<>));
-builder.Services.AddScoped<ISistemaService, SistemaService>();
+var assembly = Assembly.GetExecutingAssembly();
+
+// Registrar serviços dinamicamente usando reflexão
+builder.Services.Scan(scan => scan
+    .FromAssemblyOf<SistemaService>()  // A partir de uma classe concreta no mesmo assembly (SistemaService é um exemplo)
+    .AddClasses(classes => classes.AssignableTo(typeof(IBaseService<>)))  // Filtra as classes que implementam BaseService<T>
+    .AsImplementedInterfaces()  // Registra a classe como suas interfaces implementadas
+    .WithScopedLifetime());  // Registra o ciclo de vida como Scoped
+    
 
 // Adicionar suporte a controllers
 builder.Services.AddControllers();

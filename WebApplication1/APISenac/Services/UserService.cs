@@ -1,10 +1,14 @@
-using APISenac.Data;
 using APISenac.Models;
+using APISenac.Data.DataContracts;
 
 namespace APISenac.Services
 {
     public class UserService : BaseService<User>
     {
-        public UserService(AppDbContext context) : base(context) { }
+        public UserService(IUnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        // Métodos adicionais específicos para User, se necessário
     }
 }

@@ -1,56 +1,64 @@
+using APISenac.Data.DataContracts;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using APISenac.Services.Interfaces;
+
 namespace APISenac.Services
 {
-    using APISenac.Services.Interfaces;
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-
     public class BaseService<T> : IBaseService<T> where T : class
     {
-        protected readonly DbContext _context;  //Precisa puxa do data Unityofwork , gerenciamenro de trasação
-        private readonly DbSet<T> _dbSet;
+        protected readonly IUnitOfWork _unitOfWork;
+        private readonly IRepository<T> _repository; // Repositório genérico para a entidade T
 
-        public BaseService(DbContext context)
+        public BaseService(IUnitOfWork unitOfWork)
         {
-            _context = context;
-            _dbSet = _context.Set<T>();
+            _unitOfWork = unitOfWork;
+            _repository = _unitOfWork.GetRepository<T>(); // Obtém o repositório específico para a entidade
         }
 
         public async Task<List<T>> GetAllAsync()
         {
-            return await _dbSet.ToListAsync();
+            return await _repository.GetAllAsync();
         }
 
         public async Task<T> GetByIdAsync(Guid id)
         {
-            return await _dbSet.FindAsync(id);
+            return await _repository.GetByIdAsync(id);
         }
 
         public async Task<T> CreateAsync(T entity)
         {
-            _dbSet.Add(entity);
-            await _context.SaveChangesAsync();
+            await _repository.AddAsync(entity);
+            await _unitOfWork.CommitAsync();
+            await _unitOfWork.SaveChangesAsync(); // Salva as alterações no banco de dados
             return entity;
         }
 
         public async Task<T> UpdateAsync(Guid id, T updatedEntity)
         {
-            var existingEntity = await _dbSet.FindAsync(id);
-            if (existingEntity == null) return null;
+            // Localizar a entidade existente no banco
+            var existingEntity = await _unitOfWork.GetRepository<T>().GetByIdAsync(id);
+            if (existingEntity == null)
+                return null; // Ou lançar uma exceção, se preferir
 
-            _context.Entry(existingEntity).CurrentValues.SetValues(updatedEntity);
-            await _context.SaveChangesAsync();
+            // Atualizar os valores da entidade existente
+            _unitOfWork.GetRepository<T>().Update(updatedEntity);
+
+            // Salvar as mudanças no banco
+            await _unitOfWork.CommitAsync();
+
             return updatedEntity;
         }
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var entity = await _dbSet.FindAsync(id);
+            var entity = await _repository.GetByIdAsync(id);
             if (entity == null) return false;
 
-            _dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
+            _repository.Remove(entity);
+            await _unitOfWork.CommitAsync();
             return true;
         }
     }

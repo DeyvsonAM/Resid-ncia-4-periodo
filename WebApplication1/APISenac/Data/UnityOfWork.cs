@@ -1,18 +1,25 @@
 using APISenac.Data.DataContracts;
 using APISenac.Models;
+using System.Data;
+using Microsoft.EntityFrameworkCore.Storage;
+using IUnitOfWork = APISenac.Data.DataContracts.IUnitOfWork;
+
+
 
 namespace APISenac.Data
 {
-    public class UnitOfWork : IUnitOfWork
+    public class UnitOfWork : APISenac.Data.DataContracts.IUnitOfWork
     {
         private readonly AppDbContext _context;
+        private readonly Dictionary<Type, object> _repositories = new();
+         private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
 
             // Inicializando os repositórios com o contexto do banco de dados
-            PermitionRepository = new Repository<Permition>(_context);
+            PermitionRepository = new Repository<Permission>(_context);
             SistemaRepository = new Repository<Sistema>(_context);
             ProfileRepository = new Repository<Profile>(_context);
             UserRepository = new Repository<User>(_context);
@@ -20,36 +27,54 @@ namespace APISenac.Data
         }
 
         // Repositórios
-        public IRepository<Permition> PermitionRepository { get; }
+        public IRepository<Permission> PermitionRepository { get; }
         public IRepository<Sistema> SistemaRepository { get; }
         public IRepository<Profile> ProfileRepository { get; }
         public IRepository<User> UserRepository { get; }
         public IRepository<CustomAtribute> CustomAtributeRepository { get; }
+        public IRepository<T> GetRepository<T>() where T : class
+        {
+            var type = typeof(T);
+
+            // Verifica se já existe um repositório para a entidade
+            if (!_repositories.ContainsKey(type))
+            {
+                // Cria uma nova instância do repositório e armazena no dicionário
+                var repository = new Repository<T>(_context);
+                _repositories[type] = repository;
+            }
+
+            return (IRepository<T>)_repositories[type];
+        }
 
          /// <summary>
         /// Força o início de uma nova transação.
         /// </summary>
-        public void ForceBeginTransaction()
-        {
-            if (_currentTransaction == null)
-            {
-                _currentTransaction = _context.Database.BeginTransaction(_isolationLevel);
-            }
-        }
+       public void ForceBeginTransaction()
+{
+    // Verifica se há uma transação ativa
+    if (_currentTransaction != null)
+    {
+        // Faz rollback na transação ativa antes de descartá-la
+        _currentTransaction.Rollback();
+        _currentTransaction.Dispose();
+    }
+
+    // Inicia uma nova transação e armazena a transação ativa na variável
+    _currentTransaction = _context.Database.BeginTransaction();
+}
 
         /// <summary>
         /// Confirma a transação atual (não faz nada se não existir transação).
         /// </summary>
         public async Task CommitAsync()
-        {
-            if (_currentTransaction != null)
-            {
-                await _context.SaveChangesAsync();
-                await _currentTransaction.CommitAsync();
-                await _currentTransaction.DisposeAsync();
-                _currentTransaction = null;
-            }
-        }
+{
+    if (_context.Database.CurrentTransaction != null)
+    {
+        await _context.Database.CurrentTransaction.CommitAsync();
+    }
+    await _context.SaveChangesAsync();
+}
 
         /// <summary>
         /// Confirma a transação atual.
@@ -97,9 +122,14 @@ namespace APISenac.Data
         /// Define o nível de isolamento para novas transações.
         /// </summary>
         /// <param name="isolationLevel">O nível de isolamento desejado.</param>
-        public void SetIsolationLevel(IsolationLevel isolationLevel)
+       public void SetIsolationLevel(IsolationLevel isolationLevel)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Dispose()
         {
-            _isolationLevel = isolationLevel;
+            _context.Dispose();
         }
     }
 

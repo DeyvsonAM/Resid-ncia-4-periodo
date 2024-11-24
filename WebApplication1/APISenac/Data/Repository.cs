@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using APISenac.Data.DataContracts;
+using APISenac.Models;
 
 namespace APISenac.Data
 {
@@ -16,7 +17,7 @@ namespace APISenac.Data
 
         public async Task<T> GetByIdAsync(Guid id) => await _context.Set<T>().FindAsync(id);
 
-        public async Task<IEnumerable<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
+        public async Task<List<T>> GetAllAsync() => await _context.Set<T>().ToListAsync();
 
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
         {
@@ -25,7 +26,12 @@ namespace APISenac.Data
 
         public async Task AddAsync(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
+            if (entity is BaseEntity guidEntity && guidEntity.Id == Guid.Empty)
+    {
+        guidEntity.Id = Guid.NewGuid();
+    }
+
+        _context.Set<T>().Add(entity);
         }
 
         public void Remove(T entity)

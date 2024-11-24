@@ -6,7 +6,7 @@ namespace APISenac.Services.Interfaces
 {
     public interface ISistemaService : IBaseService<Sistema>
     {
-        // Aqui você pode adicionar métodos específicos para o ProfileService
+        // Aqui você pode adicionar métodos específicos
        
     }
 }
