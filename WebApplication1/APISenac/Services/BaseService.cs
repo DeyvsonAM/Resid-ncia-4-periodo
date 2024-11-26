@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using APISenac.Services.Interfaces;
+using APISenac.Models;
 
 namespace APISenac.Services
 {
-    public class BaseService<T> : IBaseService<T> where T : class
+    public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
         protected readonly IUnitOfWork _unitOfWork;
         private readonly IRepository<T> _repository; // Repositório genérico para a entidade T
@@ -29,12 +30,11 @@ namespace APISenac.Services
         }
 
         public async Task<T> CreateAsync(T entity)
-        {
-            await _repository.AddAsync(entity);
-            await _unitOfWork.CommitAsync();
-            await _unitOfWork.SaveChangesAsync(); // Salva as alterações no banco de dados
-            return entity;
-        }
+{
+    await _repository.AddAsync(entity);
+    await _unitOfWork.CommitAsync(); // Inclui salvar mudanças e confirmar transação
+    return entity;
+}
 
         public async Task<T> UpdateAsync(Guid id, T updatedEntity)
         {

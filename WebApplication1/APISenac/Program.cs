@@ -1,12 +1,10 @@
 using APISenac.Data;
 using Microsoft.EntityFrameworkCore;
-using APISenac.Models;
-using Microsoft.AspNetCore.Mvc;
-
 using APISenac.Services;
 using APISenac.Services.Interfaces;
 using APISenac.Data.DataContracts;
 using System.Reflection;
+using APISenac.Middlewares;
 
 
 
@@ -25,9 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-builder.Services.AddScoped<APISenac.Data.DataContracts.IUnitOfWork, APISenac.Data.UnitOfWork>();
-//Fazer função que usa Reflection para injetar todos os serviços (OBRIGATÔRIO)
-// Registra os serviços de injeção de dependência
+builder.Services.AddScoped<APISenac.Data.DataContracts.IUnitOfWork, UnitOfWork>();
+
+
 var assembly = Assembly.GetExecutingAssembly();
 
 // Registrar serviços dinamicamente usando reflexão
@@ -41,7 +39,12 @@ builder.Services.Scan(scan => scan
 // Adicionar suporte a controllers
 builder.Services.AddControllers();
 
+
+
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configura o pipeline de requisições HTTP
 if (app.Environment.IsDevelopment())

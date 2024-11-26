@@ -12,7 +12,7 @@ namespace APISenac.Data
     {
         private readonly AppDbContext _context;
         private readonly Dictionary<Type, object> _repositories = new();
-         private IDbContextTransaction _currentTransaction;
+        private IDbContextTransaction _currentTransaction;
 
         public UnitOfWork(AppDbContext context)
         {
@@ -47,34 +47,34 @@ namespace APISenac.Data
             return (IRepository<T>)_repositories[type];
         }
 
-         /// <summary>
+        /// <summary>
         /// Força o início de uma nova transação.
         /// </summary>
-       public void ForceBeginTransaction()
-{
-    // Verifica se há uma transação ativa
-    if (_currentTransaction != null)
-    {
-        // Faz rollback na transação ativa antes de descartá-la
-        _currentTransaction.Rollback();
-        _currentTransaction.Dispose();
-    }
+        public void ForceBeginTransaction()
+        {
+            // Verifica se há uma transação ativa
+            if (_currentTransaction != null)
+            {
+                // Faz rollback na transação ativa antes de descartá-la
+                _currentTransaction.Rollback();
+                _currentTransaction.Dispose();
+            }
 
-    // Inicia uma nova transação e armazena a transação ativa na variável
-    _currentTransaction = _context.Database.BeginTransaction();
-}
+            // Inicia uma nova transação e armazena a transação ativa na variável
+            _currentTransaction = _context.Database.BeginTransaction();
+        }
 
         /// <summary>
         /// Confirma a transação atual (não faz nada se não existir transação).
         /// </summary>
         public async Task CommitAsync()
-{
-    if (_context.Database.CurrentTransaction != null)
-    {
-        await _context.Database.CurrentTransaction.CommitAsync();
-    }
-    await _context.SaveChangesAsync();
-}
+        {
+            if (_context.Database.CurrentTransaction != null)
+            {
+                await _context.Database.CurrentTransaction.CommitAsync();
+            }
+            await _context.SaveChangesAsync();
+        }
 
         /// <summary>
         /// Confirma a transação atual.
@@ -110,24 +110,27 @@ namespace APISenac.Data
         /// </summary>
         public async Task<int> SaveChangesAsync()
         {
-            if (_currentTransaction == null)
+            if (_currentTransaction != null)
             {
-                ForceBeginTransaction();
+                // Caso já exista uma transação, apenas salva as alterações
+                return await _context.SaveChangesAsync();
             }
 
+            // Salva sem transação ativa
             return await _context.SaveChangesAsync();
         }
+
 
         /// <summary>
         /// Define o nível de isolamento para novas transações.
         /// </summary>
         /// <param name="isolationLevel">O nível de isolamento desejado.</param>
-       public void SetIsolationLevel(IsolationLevel isolationLevel)
-    {
-        throw new NotImplementedException();
-    }
+        public void SetIsolationLevel(IsolationLevel isolationLevel)
+        {
+            throw new NotImplementedException();
+        }
 
-    public void Dispose()
+        public void Dispose()
         {
             _context.Dispose();
         }

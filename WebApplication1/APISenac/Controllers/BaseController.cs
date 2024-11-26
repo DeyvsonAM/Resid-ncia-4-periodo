@@ -3,13 +3,14 @@ using System;
 using System.Threading.Tasks;
 using APISenac.Services;
 using APISenac.Services.Interfaces;
+using APISenac.Models;
 //Gerenciamento de exeção global - Middleware
 
 namespace APISenac.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController<T> : ControllerBase where T : class
+    public class BaseController<T> : ControllerBase where T : BaseEntity
     {
         private readonly IBaseService<T> _service;
 
@@ -34,10 +35,16 @@ namespace APISenac.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(T entity)
+        public async Task<IActionResult> CreateEntity([FromBody] T entity)
         {
-            var created = await _service.CreateAsync(entity);
-            return CreatedAtAction(nameof(GetById), new { id = created }, created);
+            // Garantir que o ID seja Guid.Empty ao criar a entidade
+            if (entity.Id != Guid.Empty)
+            {
+                entity.Id = Guid.Empty;
+            }
+
+            await _service.CreateAsync(entity);
+            return Ok(entity);
         }
 
         [HttpPut("{id}")]
