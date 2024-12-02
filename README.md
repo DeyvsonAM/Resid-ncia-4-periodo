@@ -398,7 +398,244 @@ Esta é uma pasta de configuração do ambiente de desenvolvimento **JetBrains**
   - Arquivo gerado automaticamente pelo **npm**.
   - Garante a consistência das versões de dependências no projeto.
 
+-----
+
+
+
+# **Configuração da Autenticação JWT no Program.cs**
+
+- **Descrição**:
+  - A configuração de autenticação JWT foi implementada no arquivo **`Program.cs`** para permitir a validação de tokens JWT e proteger os endpoints da API.
+
+## **Principais Funcionalidades**
+
+### 1. **Registro do Esquema de Autenticação**
+  - Foi registrado o esquema de autenticação **JWT Bearer**, utilizando a biblioteca `Microsoft.AspNetCore.Authentication.JwtBearer`.
+
+### 2. **Validação do Token JWT**
+  - As configurações de validação foram definidas:
+    - **Emissor (`Issuer`)**: O servidor que gera o token.
+    - **Público (`Audience`)**: O público esperado para o token.
+    - **Tempo de Vida (`Lifetime`)**: Garante que o token não expirou.
+    - **Assinatura (`SigningKey`)**: Valida a autenticidade do token.
+
+### 3. **Pipeline de Requisições**
+  - Foi adicionado o middleware `UseAuthentication` no pipeline, garantindo que a autenticação seja executada antes da autorização.
+
+# **AuthController.cs**
+
+- **Descrição**:
+  - Um controlador criado para lidar com autenticação de usuários e geração de tokens JWT.
+
+## **Principais Funcionalidades**
+
+### 1. **Endpoint de Login**
+  - O endpoint `POST /api/auth/login` autentica usuários com base em credenciais (usuário e senha).
+  - Gera um **token JWT** para usuários autenticados.
+
+### 2. **Validação de Credenciais**
+  - A validação é feita com lógica simplificada (exemplo de credenciais estáticas), mas pode ser adaptada para consultar o banco de dados ou outro sistema de autenticação.
+
+### 3. **Retorno de Token**
+  - Responde com o token JWT e a data de expiração quando as credenciais são válidas.
+  - Caso contrário, retorna um erro `401 Unauthorized`.
+
+# **Proteção de Endpoints com `[Authorize]`**
+
+- **Descrição**:
+  - Endpoints protegidos com o atributo `[Authorize]` requerem um token JWT válido para acesso.
+
+## **Principais Funcionalidades**
+
+### 1. **Proteger Endpoints**
+  - O atributo `[Authorize]` foi adicionado aos controladores ou métodos individuais para restringir o acesso.
+
+### 2. **Controle de Acesso Baseado em Funções**
+  - Adicionado suporte para roles (funções de usuário) através do atributo `[Authorize(Roles = "Admin")]`.
 
 
 
 
+--------------
+
+Para implementar a **autenticação via Google** em sua aplicação, você precisará usar o serviço de OAuth 2.0 do Google. Ele permite que os usuários façam login na sua aplicação com suas contas do Google. Vamos realizar isso de forma integrada ao esquema existente de autenticação JWT.
+
+Aqui está o passo a passo:
+
+---
+
+## **Passo 1: Configurar Credenciais no Google Cloud Console**
+
+1. Acesse o [Google Cloud Console](https://console.cloud.google.com/).
+2. Crie um novo projeto ou selecione um existente.
+3. Vá para **APIs e serviços** > **Credenciais**.
+4. Clique em **Criar credenciais** > **ID do cliente OAuth 2.0**.
+   - Escolha o tipo de aplicação:
+     - **Aplicação web**: Para aplicações com back-end.
+     - **Aplicação desktop**: Caso necessário.
+5. Defina os **URLs de redirecionamento autorizados**:
+   - Exemplo: `https://seusite.com/signin-google` (para produção).
+   - Para desenvolvimento local: `http://localhost:5000/signin-google`.
+6. Copie o **Client ID** e o **Client Secret**.
+
+---
+
+## **Passo 2: Instalar a Biblioteca `Google.Apis.Auth`**
+
+Adicione o pacote NuGet para validar tokens do Google:
+```bash
+dotnet add package Google.Apis.Auth
+```
+
+---
+
+## **Passo 3: Criar Lógica de Validação do Token do Google**
+
+No seu **AuthController**, vamos adicionar um endpoint que recebe um **ID Token** gerado pelo Google e valida esse token. Após validar, você pode gerar um token JWT interno para sua aplicação.
+
+### **Código do Endpoint no AuthController**
+
+Adicione o método para autenticação com Google:
+
+```csharp
+using Google.Apis.Auth;
+
+[HttpPost("google-login")]
+public async Task<IActionResult> GoogleLogin([FromBody] GoogleLoginRequest request)
+{
+    try
+    {
+        // Valida o token do Google
+        var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = new[] { "SeuClientID.apps.googleusercontent.com" } // Substitua pelo seu Client ID
+        });
+
+        // Caso o token seja válido, você pode criar um JWT interno para sua aplicação
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, payload.Email),
+            new Claim("GoogleId", payload.Subject), // ID único do Google
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuaChaveSecretaMuitoForte"));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: "https://seusite.com",
+            audience: "https://seusite.com",
+            claims: claims,
+            expires: DateTime.Now.AddHours(1),
+            signingCredentials: creds);
+
+        return Ok(new
+        {
+            token = new JwtSecurityTokenHandler().WriteToken(token),
+            expiration = token.ValidTo,
+            email = payload.Email,
+            name = payload.Name
+        });
+    }
+    catch (InvalidJwtException)
+    {
+        return Unauthorized(new { Message = "Token inválido do Google." });
+    }
+}
+
+// Classe para receber o token do cliente
+public class GoogleLoginRequest
+{
+    public string IdToken { get; set; }
+}
+```
+
+---
+
+## **Passo 4: Fluxo de Login no Cliente**
+
+Seu cliente (web ou mobile) precisa obter o **ID Token** do Google antes de enviá-lo para o seu servidor. Isso geralmente é feito com as bibliotecas do Google.
+
+### **1. Web (JavaScript)**
+
+Utilize a biblioteca **Google Sign-In**:
+1. Adicione o script do Google no seu front-end:
+   ```html
+   <script src="https://accounts.google.com/gsi/client" async defer></script>
+   ```
+2. Configure o botão de login no Google:
+   ```javascript
+   const client = google.accounts.id.initialize({
+       client_id: "SeuClientID.apps.googleusercontent.com",
+       callback: handleCredentialResponse
+   });
+   google.accounts.id.renderButton(
+       document.getElementById("buttonDiv"),
+       { theme: "outline", size: "large" } // Configurações do botão
+   );
+
+   function handleCredentialResponse(response) {
+       // Envie o ID Token para sua API
+       fetch('https://suaapi.com/api/auth/google-login', {
+           method: 'POST',
+           headers: { 'Content-Type': 'application/json' },
+           body: JSON.stringify({ idToken: response.credential })
+       })
+       .then(response => response.json())
+       .then(data => {
+           console.log("Token JWT:", data.token);
+       })
+       .catch(error => console.error("Erro:", error));
+   }
+   ```
+
+---
+
+## **Passo 5: Testando o Endpoint**
+
+### **Requisição**
+Faça uma requisição `POST` para o endpoint `api/auth/google-login` com o seguinte body:
+
+```json
+{
+  "idToken": "TokenRecebidoDoClienteGoogle"
+}
+```
+
+### **Resposta de Sucesso**
+Se o token do Google for válido, o servidor responderá com um JWT da sua aplicação e informações do usuário:
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "expiration": "2024-12-01T15:00:00Z",
+  "email": "usuario@gmail.com",
+  "name": "Usuário do Google"
+}
+```
+
+### **Resposta de Erro**
+Caso o token seja inválido ou expirado:
+
+```json
+{
+  "message": "Token inválido do Google."
+}
+```
+
+---
+
+## **Passo 6: Protegendo Endpoints**
+
+Como já temos o esquema JWT implementado, os tokens JWT gerados após o login pelo Google podem ser usados para acessar endpoints protegidos com `[Authorize]`.
+
+---
+
+## **Resumo do Fluxo**
+
+1. **Cliente**: Usuário faz login com Google e obtém o **ID Token**.
+2. **Servidor**: Recebe e valida o ID Token com o **Google.Apis.Auth**.
+3. **JWT**: Após validação, o servidor gera um JWT interno.
+4. **Acesso Protegido**: O JWT é usado para acessar endpoints da API.
+
+Se precisar de ajuda para adaptar essa lógica ao seu projeto, é só avisar! 🚀

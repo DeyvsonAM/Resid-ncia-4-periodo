@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\APISenac.csproj": {}
+    "C:\\Users\\Matheus\\Desktop\\AtividadesFaculdade\\Residencia_RTPD\\att\\Resid-ncia-4-periodo\\WebApplication1\\APISenac\\APISenac.csproj": {}
   },
   "projects": {
-    "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\APISenac.csproj": {
+    "C:\\Users\\Matheus\\Desktop\\AtividadesFaculdade\\Residencia_RTPD\\att\\Resid-ncia-4-periodo\\WebApplication1\\APISenac\\APISenac.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\APISenac.csproj",
+        "projectUniqueName": "C:\\Users\\Matheus\\Desktop\\AtividadesFaculdade\\Residencia_RTPD\\att\\Resid-ncia-4-periodo\\WebApplication1\\APISenac\\APISenac.csproj",
         "projectName": "APISenac",
-        "projectPath": "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\APISenac.csproj",
-        "packagesPath": "C:\\Users\\deyvs\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\deyvs\\OneDrive\\Área de Trabalho\\Faculdade\\WebApplication1\\WebApplication1\\APISenac\\obj\\",
+        "projectPath": "C:\\Users\\Matheus\\Desktop\\AtividadesFaculdade\\Residencia_RTPD\\att\\Resid-ncia-4-periodo\\WebApplication1\\APISenac\\APISenac.csproj",
+        "packagesPath": "C:\\Users\\Matheus\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Matheus\\Desktop\\AtividadesFaculdade\\Residencia_RTPD\\att\\Resid-ncia-4-periodo\\WebApplication1\\APISenac\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\deyvs\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Matheus\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -36,8 +36,9 @@
         "restoreAuditProperties": {
           "enableAudit": "true",
           "auditLevel": "low",
-          "auditMode": "direct"
-        }
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -50,6 +51,10 @@
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
               "version": "[12.0.1, )"
+            },
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Microsoft.AspNetCore.Mvc": {
               "target": "Package",
@@ -97,6 +102,24 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[8.0.11, 8.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[8.0.11, 8.0.11]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[8.0.11, 8.0.11]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[8.0.11, 8.0.11]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -105,7 +128,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

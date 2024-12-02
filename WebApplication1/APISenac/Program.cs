@@ -5,6 +5,9 @@ using APISenac.Services.Interfaces;
 using APISenac.Data.DataContracts;
 using System.Reflection;
 using APISenac.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 
@@ -39,12 +42,40 @@ builder.Services.Scan(scan => scan
 // Adicionar suporte a controllers
 builder.Services.AddControllers();
 
+// Implementa autenticação JWT : 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true, // Valida o emissor
+        ValidateAudience = true, // Valida o público
+        ValidateLifetime = true, // Valida o tempo de vida do token
+        ValidateIssuerSigningKey = true, // Valida a assinatura
 
+        ValidIssuer = "https://seusite.com", // Substitua pelo emissor da sua aplicação
+        ValidAudience = "https://seusite.com", // Substitua pelo público esperado
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes("SuaChaveSecretaMuitoForte")) // Substitua pela sua chave secreta
+    };
+});
 
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
+
+// Configure o pipeline da aplicação JWT
+app.UseHttpsRedirection();
+
+// Ative autenticação antes de autorização
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 // Configura o pipeline de requisições HTTP
 if (app.Environment.IsDevelopment())
