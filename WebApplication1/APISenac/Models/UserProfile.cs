@@ -10,7 +10,7 @@ namespace APISenac.Models
       
         //Navegação
         public User User { get; set; }
-        public Profile Profile { get; set; }
+        public BDProfile Profile { get; set; }
 
         
     }

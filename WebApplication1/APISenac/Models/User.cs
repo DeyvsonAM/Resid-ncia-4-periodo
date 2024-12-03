@@ -8,6 +8,9 @@ namespace APISenac.Models
         private string Senha { get; set; } = string.Empty;
         private string Cpf { get; set; } = string.Empty;
 
+        public string? TwoFactorSecretKey { get; set; }
+    public bool IsTwoFactorEnabled { get; set; }
+
         // Relacionamento entre User e User_Profile
         public ICollection<UserProfile> UserProfiles { get; set; } = new List<UserProfile>();
 

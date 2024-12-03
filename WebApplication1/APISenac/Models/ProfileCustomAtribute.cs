@@ -1,6 +1,6 @@
 namespace APISenac.Models
 {
-    public class Profile_CustomAtribute
+    public class ProfileCustomAtribute
     {
         //Chave estrangeira
         public Guid CustomAtributeId { get; set; }
@@ -8,7 +8,7 @@ namespace APISenac.Models
         
         
         
-        public Profile Profile { get; set; }
+        public BDProfile Profile { get; set; }
         public CustomAtribute CustomAtribute { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using APISenac.Models;
 
 namespace APISenac.Data.DataContracts;
 
-public interface IProfileRepository : IRepository<Profile>
+public interface IProfileRepository : IRepository<BDProfile>
 {
-    
+   
 }

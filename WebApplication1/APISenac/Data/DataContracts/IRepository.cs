@@ -10,5 +10,10 @@ namespace APISenac.Data.DataContracts
         Task AddAsync(T entity);
         void Remove(T entity);
         void Update(T entity);
+        Task AdicionarPermissoesAoPerfilAsync(Guid perfilId, List<Guid> permissoesIds);
+        Task RemoverPermissoesDoPerfilAsync(Guid perfilId, List<Guid> permissoesIds);
+
+        Task<List<string>> ObterPermissoesPorPerfilAsync(Guid perfilId);
+        
     }
 }

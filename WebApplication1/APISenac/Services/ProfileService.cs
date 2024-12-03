@@ -4,12 +4,12 @@ using APISenac.Services.Interfaces;
 
 namespace APISenac.Services
 {
-    public class ProfileService : BaseService<Profile>, IProfileService
+    public class ProfileService : BaseService<BDProfile>, IBDProfileService
     {
         public ProfileService(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        // Métodos adicionais específicos para Profile, se necessário
+        // Métodos adicionais específicos para BDProfile, se necessário
     }
 }

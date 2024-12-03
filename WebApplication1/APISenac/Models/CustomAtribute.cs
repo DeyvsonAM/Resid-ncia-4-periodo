@@ -10,7 +10,7 @@ namespace APISenac.Models
         public char Delimitador { get; set; }
 
        
-        public ICollection<Profile_CustomAtribute> ProfileCustomAtributes { get; set; }
+        public ICollection<ProfileCustomAtribute> ProfileCustomAtributes { get; set; }
         public ICollection<UserProfileCustomAtribute> UserProfileCustomAtributes { get; set; }
 
     }

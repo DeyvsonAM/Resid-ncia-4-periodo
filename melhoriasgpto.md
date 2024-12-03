@@ -1,3 +1,43 @@
+gereniamento de permissoes
+
+
+metodos publicos e medotos especificos 
+
+https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-9.0
+
+Validação de token usando Autenticação do google
+
+https://github.com/googleapis/google-api-dotnet-client
+
+
+Google.Apis.Auth
+JWT
+
+https://stackoverflow.com/questions/71720390/handle-jwt-tokens-with-google-auth
+Microsoft.AspNetCore.Authentication.Google
+
+fazer as validações necessárias para cada entidade
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Com base em todo o conteúdo que você forneceu e a arquitetura atual do projeto, aqui estão algumas sugestões para melhorias e complementos no **Projeto APISenac**. Vou dividir as sugestões em diferentes categorias, explicando onde e como as implementações podem ser feitas:
 
 ---

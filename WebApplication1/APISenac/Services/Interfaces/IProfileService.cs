@@ -4,9 +4,10 @@ using APISenac.Models;
 
 namespace APISenac.Services.Interfaces
 {
-    public interface IProfileService : IBaseService<Profile>
+    public interface IBDProfileService : IBaseService<BDProfile>
     {
         // Aqui você pode adicionar métodos específicos
-       
+     
     }
+    
 }

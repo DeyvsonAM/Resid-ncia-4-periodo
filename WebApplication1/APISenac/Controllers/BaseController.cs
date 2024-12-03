@@ -1,65 +1,95 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
-using APISenac.Services;
 using APISenac.Services.Interfaces;
 using APISenac.Models;
-//Gerenciamento de exeção global - Middleware
 
 namespace APISenac.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController<T> : ControllerBase where T : BaseEntity
+    public class BaseController<T, TDTO> : ControllerBase
+        where T : BaseEntity
+        where TDTO : class
     {
         private readonly IBaseService<T> _service;
+        private readonly IMapper _mapper;
 
-        public BaseController(IBaseService<T> service)
+        public BaseController(IBaseService<T> service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
+        }
+
+
+        
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateEntity([FromBody] TDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var entity = _mapper.Map<T>(dto);
+                await _service.CreateAsync(entity);
+                return CreatedAtAction(nameof(GetById), new { id = entity.Id }, entity);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ocorreu um erro ao criar a entidade", details = ex.Message });
+            }
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var entity = await _service.GetByIdAsync(id);
+            if (entity == null)
+                return NotFound();
+
+            var dto = _mapper.Map<TDTO>(entity);
+            return Ok(dto);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _service.GetAllAsync();
-            return Ok(result);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
-        {
-            var result = await _service.GetByIdAsync(id);
-            if (result == null) return NotFound();
-            return Ok(result);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateEntity([FromBody] T entity)
-        {
-            // Garantir que o ID seja Guid.Empty ao criar a entidade
-            if (entity.Id != Guid.Empty)
+            try
             {
-                entity.Id = Guid.Empty;
+                var entities = await _service.GetAllAsync(); // Chama o método GetAllAsync do serviço.
+                var Models = _mapper.Map<List<T>>(entities); // Mapeia as entidades para os DTOs.
+                return Ok(Models);
             }
-
-            await _service.CreateAsync(entity);
-            return Ok(entity);
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ocorreu um erro ao obter as entidades", details = ex.Message });
+            }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, T entity)
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateEntity(Guid id, [FromBody] TDTO dto)
         {
-            var updated = await _service.UpdateAsync(id, entity);
-            if (updated == null) return NotFound();
-            return Ok(updated);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var entity = _mapper.Map<T>(dto);
+            var updatedEntity = await _service.UpdateAsync(id, entity);
+
+            if (updatedEntity == null)
+                return NotFound();
+
+            return Ok(updatedEntity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteEntity(Guid id)
         {
             var deleted = await _service.DeleteAsync(id);
-            if (!deleted) return NotFound();
+            if (!deleted)
+                return NotFound();
+
             return NoContent();
         }
     }
