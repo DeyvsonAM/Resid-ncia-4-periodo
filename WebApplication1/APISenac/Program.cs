@@ -18,6 +18,15 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+        policy.WithOrigins("http://localhost:3000")  
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
+
 
 
 // Obter a Connection String do appsettings.json
@@ -49,8 +58,8 @@ builder.Services.AddAuthorization();
 // Registra o Swagger
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-   // Registra a implementação de IRepositor
- 
+// Registra a implementação de IRepositor
+
 
 var assembly = Assembly.GetExecutingAssembly();
 
@@ -76,6 +85,9 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 
 // Configura o pipeline de requisições HTTP
+
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -83,6 +95,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
+app.UseCors("AllowFrontend");
 app.MapControllers();
 
 app.Run();

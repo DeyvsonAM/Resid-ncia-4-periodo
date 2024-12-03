@@ -54,7 +54,7 @@ namespace APISenac.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public virtual async Task<IActionResult> GetAll()
         {
             try
             {

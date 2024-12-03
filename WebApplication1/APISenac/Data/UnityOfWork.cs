@@ -89,7 +89,7 @@ public class UnitOfWork : IUnitOfWork
         {
             await _currentTransaction.RollbackAsync();
             _currentTransaction.Dispose();
-            _currentTransaction = null;  // Limpa a transação
+            _currentTransaction = null; 
         }
     }
 

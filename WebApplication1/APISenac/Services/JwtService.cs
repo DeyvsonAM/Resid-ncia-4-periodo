@@ -6,7 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 
 public class JwtService
 {
-    private const string Key = "123456789"; // Substitua por algo seguro
+    private const string Key = "123456789"; 
     private const string Issuer = "API.Senac";
     private const string Audience = "API.Senac.Client";
 
