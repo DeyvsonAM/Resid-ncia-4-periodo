@@ -10,6 +10,10 @@ namespace APISenac.Services
         {
         }
 
+        
+
+        
+
         // Métodos adicionais específicos para Sistema, se necessário
     }
 }

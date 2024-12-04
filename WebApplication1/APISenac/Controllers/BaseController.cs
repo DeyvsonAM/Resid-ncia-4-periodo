@@ -92,5 +92,22 @@ namespace APISenac.Controllers
 
             return NoContent();
         }
+
+
+        [HttpPut("Inactive{id:guid}")]
+        public async Task<IActionResult> Inactive(Guid id)
+        {
+            // Chama o serviço para inativar o sistema
+            var result = await _service.InactiveAsync(id);
+
+            if (result)
+            {
+                // Retorna status 200 OK se a inativação foi bem-sucedida
+                return Ok(new { message = "Sistema inativado com sucesso!" });
+            }
+            
+            // Retorna status 404 Not Found se a entidade não foi encontrada
+            return NotFound(new { message = "Sistema não encontrado!" });
+        }
     }
 }

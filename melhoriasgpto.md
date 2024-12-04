@@ -1,5 +1,8 @@
 gereniamento de permissoes
 
+-Rider (Pago)
+-VS()
+thiago123789@gmail.com
 
 metodos publicos e medotos especificos 
 

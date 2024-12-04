@@ -19,20 +19,20 @@ public class ProfilePermissionController : ControllerBase
     }
 
     [HttpPost]
-[Route("api/perfis/adicionar-permissoes")]
-public async Task<IActionResult> AdicionarPermissoesAoPerfil([FromBody] AdicionarPermissoesRequest request)
-{
-    try
+    [Route("api/perfis/adicionar-permissoes")]
+    public async Task<IActionResult> AdicionarPermissoesAoPerfil([FromBody] AdicionarPermissoesRequest request)
     {
-        // Chama o serviço para adicionar permissões
-        await _ProfilePermissionService.AdicionarPermissoesAoPerfilAsync(request.PerfilId, request.Permissoes);
-        return Ok("Permissões adicionadas com sucesso.");
+        try
+        {
+            // Chama o serviço para adicionar permissões
+            await _ProfilePermissionService.AdicionarPermissoesAoPerfilAsync(request.PerfilId, request.Permissoes);
+            return Ok("Permissões adicionadas com sucesso.");
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Erro ao adicionar permissões ao perfil: {ex.Message}");
+        }
     }
-    catch (Exception ex)
-    {
-        return BadRequest($"Erro ao adicionar permissões ao perfil: {ex.Message}");
-    }
-}
 
 
     [HttpDelete("{perfilId}/permissoes")]
@@ -48,31 +48,31 @@ public async Task<IActionResult> AdicionarPermissoesAoPerfil([FromBody] Adiciona
             return BadRequest($"Erro: {ex.Message}");
         }
 
-        
+
     }
 
     [HttpGet("permissoes/{perfilId}")]
-        public async Task<ActionResult<List<string>>> GetPermissoesPorPerfil(Guid perfilId)
+    public async Task<ActionResult<List<string>>> GetPermissoesPorPerfil(Guid perfilId)
+    {
+        try
         {
-            try
-            {
-                var permissoes = await _ProfilePermissionService.ObterPermissoesDoPerfilAsync(perfilId);
+            var permissoes = await _ProfilePermissionService.ObterPermissoesDoPerfilAsync(perfilId);
 
-                if (permissoes == null || permissoes.Count == 0)
-                {
-                    return NotFound("Nenhuma permissão encontrada para este perfil.");
-                }
-
-                return Ok(permissoes);
-            }
-            catch (Exception ex)
+            if (permissoes == null || permissoes.Count == 0)
             {
-                return StatusCode(500, $"Erro ao buscar permissões: {ex.Message}");
+                return NotFound("Nenhuma permissão encontrada para este perfil.");
             }
+
+            return Ok(permissoes);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Erro ao buscar permissões: {ex.Message}");
         }
     }
+}
 
 
 
-     
+
 

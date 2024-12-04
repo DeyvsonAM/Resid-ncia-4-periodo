@@ -48,14 +48,34 @@ namespace APISenac.Services
             return updatedEntity;
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public virtual async Task<bool> InactiveAsync(Guid id)
         {
-            var entity = await _repository.GetByIdAsync(id);
+            // Recupera a entidade pelo ID
+            T entity = await _repository.GetByIdAsync(id);
             if (entity == null) return false;
 
-            _repository.Remove(entity);
+            // Usando reflexão para buscar a propriedade 'Active' e alterá-la para false
+            var activeProperty = typeof(T).GetProperty("Active");
+            if (activeProperty != null && activeProperty.CanWrite)
+            {
+                activeProperty.SetValue(entity, false); // Define o campo 'Active' como falso
+            }
+            else
+            {
+                // Se a propriedade 'Active' não existir ou não for gravável, retorna false
+                return false;
+            }
+
+            // Atualiza a entidade e persiste a alteração
+            _repository.Update(entity);
             await _unitOfWork.CommitAsync();
             return true;
         }
+
+        public Task<bool> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
+

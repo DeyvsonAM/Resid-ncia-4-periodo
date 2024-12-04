@@ -11,5 +11,6 @@ namespace APISenac.Services.Interfaces
         Task<T> CreateAsync(T entity);
         Task<T> UpdateAsync(Guid id, T updatedEntity);
         Task<bool> DeleteAsync(Guid id);
+        Task<bool> InactiveAsync(Guid id);
     }
 }
